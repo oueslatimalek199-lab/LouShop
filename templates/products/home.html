@@ -1,11 +1,59 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}ShopLine — Accueil{% endblock %}
 
 {% block content %}
-    <h1>Bienvenue sur ShopLine 🛍️</h1>
-    <p style="color: var(--muted); margin-top: 0.5rem;">
-        Le projet est correctement configuré ! On va ajouter les produits, le panier,
-        les commandes et l'authentification dans les prochaines étapes.
-    </p>
+
+    <h1>Nos produits</h1>
+
+    {# --- Menu de filtre par catégorie --- #}
+    {% if categories %}
+        <div style="margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            {# Lien "Tous" : revient à la page sans filtre #}
+            <a href="{% url 'home' %}"
+               class="btn {% if not selected_category %}btn-primary{% else %}btn-accent{% endif %}">
+                Tous
+            </a>
+
+            {# On boucle sur chaque catégorie pour créer un bouton de filtre #}
+            {% for category in categories %}
+                <a href="{% url 'home' %}?categorie={{ category.slug }}"
+                   class="btn {% if selected_category == category %}btn-primary{% else %}btn-accent{% endif %}">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# --- Grille de produits --- #}
+    {% if products %}
+        <div class="card-grid">
+            {# On boucle sur la liste "products" envoyée par la vue (views.py) #}
+            {% for product in products %}
+                <a href="{{ product.get_absolute_url }}" class="card" style="text-decoration:none; color: inherit;">
+
+                    {# Si le produit a une image -> on l'affiche, sinon -> placeholder #}
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card__img">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.svg' %}" alt="{{ product.name }}" class="card__img">
+                    {% endif %}
+
+                    <div class="card__body">
+                        <h3>{{ product.name }}</h3>
+                        <span style="color: var(--muted); font-size: 0.85rem;">{{ product.category.name }}</span>
+                        {# {{ }} affiche une valeur. Le filtre |floatformat:2 force 2 décimales #}
+                        <span class="card__price">{{ product.price|floatformat:2 }} TND</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        {# S'il n'y a aucun produit en base de données #}
+        <p style="margin-top: 1.5rem; color: var(--muted);">
+            Aucun produit pour le moment. Ajoute-en depuis l'admin Django (/admin/) !
+        </p>
+    {% endif %}
+
 {% endblock %}

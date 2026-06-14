@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} — ShopLine{% endblock %}
+
+{% block content %}
+
+    {# Fil d'ariane simple pour revenir à l'accueil #}
+    <p style="margin-bottom: 1rem;">
+        <a href="{% url 'home' %}">&larr; Retour aux produits</a>
+    </p>
+
+    {# On utilise une grille à 2 colonnes : image | infos #}
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+
+        {# --- Colonne image --- #}
+        <div>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                     style="width: 100%; border-radius: var(--radius); border: 1px solid var(--border);">
+            {% else %}
+                <img src="{% static 'images/placeholder.svg' %}" alt="{{ product.name }}"
+                     style="width: 100%; border-radius: var(--radius); border: 1px solid var(--border);">
+            {% endif %}
+        </div>
+
+        {# --- Colonne infos --- #}
+        <div>
+            <h1>{{ product.name }}</h1>
+
+            <p style="color: var(--muted); margin-top: 0.25rem;">
+                Catégorie : {{ product.category.name }}
+            </p>
+
+            <p class="card__price" style="font-size: 1.6rem; margin-top: 1rem;">
+                {{ product.price|floatformat:2 }} TND
+            </p>
+
+            {# --- Affichage du stock --- #}
+            {% if product.stock > 0 %}
+                <p style="color: var(--primary); margin-top: 0.5rem;">
+                    ✅ En stock ({{ product.stock }} disponibles)
+                </p>
+            {% else %}
+                <p style="color: #b3261e; margin-top: 0.5rem;">
+                    ❌ Rupture de stock
+                </p>
+            {% endif %}
+
+            {# --- Description --- #}
+            <p style="margin-top: 1rem; line-height: 1.7;">
+                {{ product.description }}
+            </p>
+
+            {# --- Bouton "Ajouter au panier" ---
+                 Le formulaire/la logique du panier sera implémentée à l'étape 3.
+                 Pour l'instant le bouton est désactivé si le produit n'est pas en stock. #}
+            {% if product.stock > 0 %}
+                <button class="btn btn-accent" style="margin-top: 1.5rem;">
+                    Ajouter au panier
+                </button>
+            {% else %}
+                <button class="btn btn-accent" style="margin-top: 1.5rem;" disabled>
+                    Indisponible
+                </button>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
