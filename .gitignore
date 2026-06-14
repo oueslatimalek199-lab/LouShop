@@ -1,0 +1,25 @@
+# Environnement Python
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Base de données locale
+db.sqlite3
+*.sqlite3
+
+# Fichiers médias uploadés (images produits, etc.)
+media/
+
+# Fichiers statiques collectés (production)
+staticfiles/
+
+# Variables d'environnement / secrets
+.env
+
+# Fichiers spécifiques aux éditeurs / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

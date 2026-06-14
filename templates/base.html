@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ShopLine{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="navbar__logo">ShopLine</a>
+        <ul class="navbar__links">
+            <li><a href="{% url 'home' %}">Accueil</a></li>
+            <li><a href="#">Produits</a></li>
+            <li><a href="#">Panier</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="#">Mes commandes</a></li>
+                <li><a href="#">Déconnexion ({{ user.username }})</a></li>
+            {% else %}
+                <li><a href="#">Connexion</a></li>
+                <li><a href="#">Inscription</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        &copy; {% now "Y" %} ShopLine — Projet e-commerce (Task 1)
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
