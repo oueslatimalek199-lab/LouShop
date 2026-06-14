@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - ShopLine{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-detail__container">
+        <!-- Image produit -->
+        <div class="product-detail__image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="product-detail__image--placeholder">Pas d'image disponible</div>
+            {% endif %}
+        </div>
+        
+        <!-- Informations produit -->
+        <div class="product-detail__info">
+            <div class="breadcrumb">
+                <a href="{% url 'home' %}">Accueil</a> / 
+                <a href="?category={{ product.category.id }}">{{ product.category.name }}</a> / 
+                <span>{{ product.name }}</span>
+            </div>
+            
+            <h1 class="product-detail__title">{{ product.name }}</h1>
+            <p class="product-detail__category">Catégorie: {{ product.category.name }}</p>
+            
+            <div class="product-detail__price">
+                <span class="price">{{ product.price }} TND</span>
+            </div>
+            
+            <div class="product-detail__stock">
+                {% if product.is_in_stock %}
+                    <span class="badge badge--success">En stock ({{ product.stock }} unités)</span>
+                {% else %}
+                    <span class="badge badge--danger">Rupture de stock</span>
+                {% endif %}
+            </div>
+            
+            <div class="product-detail__description">
+                <h3>Description</h3>
+                <p>{{ product.description }}</p>
+            </div>
+            
+            <!-- Ajouter au panier -->
+            {% if product.is_in_stock %}
+                <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="quantity">Quantité:</label>
+                        <input type="number" id="quantity" name="quantity" min="1" max="{{ product.stock }}" value="1" class="form__input">
+                    </div>
+                    <button type="submit" class="btn btn--large btn--success">Ajouter au panier</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Produits similaires -->
+    {% if related_products %}
+        <div class="related-products">
+            <h2>Produits similaires</h2>
+            <div class="products-grid">
+                {% for related in related_products %}
+                    <div class="product-card">
+                        {% if related.image %}
+                            <img src="{{ related.image.url }}" alt="{{ related.name }}" class="product-card__image">
+                        {% else %}
+                            <div class="product-card__image product-card__image--placeholder">
+                                <span>Pas d'image</span>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="product-card__content">
+                            <h3 class="product-card__title">
+                                <a href="{% url 'product_detail' related.id %}">{{ related.name }}</a>
+                            </h3>
+                            <p class="product-card__price">{{ related.price }} TND</p>
+                            
+                            {% if related.is_in_stock %}
+                                <form method="post" action="{% url 'add_to_cart' related.id %}" class="add-to-cart-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn--small btn--success">Ajouter</button>
+                                </form>
+                            {% else %}
+                                <span class="badge badge--danger">Rupture de stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

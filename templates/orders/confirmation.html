@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmation de commande - ShopLine{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="confirmation-header">
+        <h1>✓ Commande confirmée</h1>
+        <p>Numéro de commande: <strong>{{ order.order_number }}</strong></p>
+    </div>
+    
+    <div class="confirmation-content">
+        <!-- Détails de la commande -->
+        <div class="order-details">
+            <h2>Détails de la commande</h2>
+            
+            <div class="detail-section">
+                <h3>Articles commandés</h3>
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Quantité</th>
+                            <th>Prix unitaire</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                            <tr>
+                                <td>{{ item.product_name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.price }} TND</td>
+                                <td>{{ item.get_total_price }} TND</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Adresse de livraison</h3>
+                <p>
+                    {{ order.address }}<br>
+                    {{ order.zip_code }} {{ order.city }}<br>
+                    {{ order.country }}<br>
+                    {{ order.phone_number }}
+                </p>
+            </div>
+            
+            <div class="detail-section">
+                <h3>Totaux</h3>
+                <div class="totals">
+                    <div class="total-line">
+                        <span>Sous-total:</span>
+                        <span>{{ order.subtotal }} TND</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Frais de port:</span>
+                        <span>{{ order.shipping_cost }} TND</span>
+                    </div>
+                    <div class="total-line total-line--final">
+                        <span>Total:</span>
+                        <span>{{ order.total_amount }} TND</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prochaines étapes -->
+        <div class="next-steps">
+            <h2>Prochaines étapes</h2>
+            <ol>
+                <li>Vous recevrez un email de confirmation sous peu</li>
+                <li>Vous pourrez suivre votre commande dans votre compte</li>
+                <li>Votre commande sera expédiée dans les 2-3 jours ouvrables</li>
+                <li>Vous recevrez un numéro de suivi pour suivre votre colis</li>
+            </ol>
+        </div>
+        
+        <div class="confirmation-actions">
+            <a href="{% url 'order_history' %}" class="btn btn--large btn--primary">Voir mes commandes</a>
+            <a href="{% url 'home' %}" class="btn btn--outline">Continuer les achats</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

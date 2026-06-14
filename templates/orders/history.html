@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Commandes - ShopLine{% endblock %}
+
+{% block content %}
+<div class="orders-container">
+    <h1>Historique de mes commandes</h1>
+    
+    {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card__header">
+                        <div>
+                            <h3>Commande {{ order.order_number }}</h3>
+                            <p class="order-date">{{ order.created_at|date:"d/m/Y H:i" }}</p>
+                        </div>
+                        <div class="order-status">
+                            <span class="badge badge--{{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-card__content">
+                        <p><strong>Total:</strong> {{ order.total_amount }} TND</p>
+                        <p><strong>Articles:</strong> {{ order.items.count }} produit(s)</p>
+                    </div>
+                    
+                    <div class="order-card__footer">
+                        <a href="{% url 'order_detail' order.id %}" class="btn btn--small btn--primary">Voir détails</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>Vous n'avez pas encore de commande</p>
+            <a href="{% url 'home' %}" class="btn btn--primary">Commencer vos achats</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

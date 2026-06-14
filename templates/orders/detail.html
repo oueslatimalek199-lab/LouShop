@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Détails de commande - ShopLine{% endblock %}
+
+{% block content %}
+<div class="order-detail-container">
+    <a href="{% url 'order_history' %}" class="link-back">← Retour aux commandes</a>
+    
+    <h1>Commande {{ order.order_number }}</h1>
+    
+    <div class="order-detail-content">
+        <!-- Statut et dates -->
+        <div class="order-info">
+            <div class="info-item">
+                <span class="label">Statut:</span>
+                <span class="badge badge--{{ order.status }}">{{ order.get_status_display }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Date de commande:</span>
+                <span>{{ order.created_at|date:"d/m/Y H:i" }}</span>
+            </div>
+            {% if order.shipped_at %}
+                <div class="info-item">
+                    <span class="label">Date d'expédition:</span>
+                    <span>{{ order.shipped_at|date:"d/m/Y" }}</span>
+                </div>
+            {% endif %}
+            {% if order.delivered_at %}
+                <div class="info-item">
+                    <span class="label">Date de livraison:</span>
+                    <span>{{ order.delivered_at|date:"d/m/Y" }}</span>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Articles commandés -->
+        <div class="detail-section">
+            <h2>Articles commandés</h2>
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product_name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.price }} TND</td>
+                            <td>{{ item.get_total_price }} TND</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Adresse de livraison -->
+        <div class="detail-section">
+            <h2>Adresse de livraison</h2>
+            <p>
+                {{ order.address }}<br>
+                {{ order.zip_code }} {{ order.city }}<br>
+                {{ order.country }}<br>
+                Téléphone: {{ order.phone_number }}
+            </p>
+        </div>
+        
+        <!-- Résumé des coûts -->
+        <div class="detail-section">
+            <h2>Résumé des coûts</h2>
+            <div class="totals">
+                <div class="total-line">
+                    <span>Sous-total:</span>
+                    <span>{{ order.subtotal }} TND</span>
+                </div>
+                <div class="total-line">
+                    <span>Frais de port:</span>
+                    <span>{{ order.shipping_cost }} TND</span>
+                </div>
+                <div class="total-line total-line--final">
+                    <span>Total:</span>
+                    <span>{{ order.total_amount }} TND</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
