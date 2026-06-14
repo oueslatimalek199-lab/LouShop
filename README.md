@@ -18,8 +18,8 @@ Projet réalisé dans le cadre du stage Full Stack Development chez **CodeAlpha*
 
 ```bash
 # 1. Cloner le projet
-git clone https://github.com/oueslatimalek199-lab/shopline.git
-cd shopline
+git clone https://github.com/oueslatimalek199-lab/LouShop.git
+cd LouShop
 
 # 2. Créer et activer un environnement virtuel
 python -m venv venv
