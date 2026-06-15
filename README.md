@@ -7,12 +7,12 @@ Projet réalisé dans le cadre du stage Full Stack Development chez **CodeAlpha*
 - Frontend : HTML, CSS, JavaScript (templates Django)
 - Base de données : SQLite (par défaut, en développement)
 
-## Fonctionnalités prévues
+## Fonctionnalités
 - [x] Setup du projet
-- [ ] Listing produits + page détail produit
-- [ ] Authentification (inscription / connexion)
-- [ ] Panier
-- [ ] Traitement des commandes
+- [x] Listing produits + page détail produit (avec filtre par catégorie)
+- [x] Panier (ajout, modification de quantité, suppression, basé sur la session)
+- [x] Authentification (inscription / connexion / déconnexion)
+- [x] Traitement des commandes (checkout, confirmation, historique, décrément du stock)
 
 ## Installation et lancement en local
 
@@ -48,10 +48,26 @@ Le site sera disponible sur http://127.0.0.1:8000/
 
 ```
 ecommerce_project/
-├── accounts/     # inscription, connexion, profils
+├── accounts/     # inscription, connexion, déconnexion
 ├── products/     # produits, catégories, page détail
-├── cart/         # panier
-├── orders/       # traitement des commandes
-├── templates/    # HTML partagés (base.html, pages)
-└── static/       # CSS, JS
+├── cart/         # panier (basé sur la session)
+├── orders/       # checkout, confirmation, historique des commandes
+├── templates/    # HTML partagés (base.html, pages de chaque app)
+└── static/       # CSS, images
 ```
+
+## Comptes de test
+
+Crée un compte admin pour gérer produits/catégories/commandes via `/admin/` :
+```bash
+python manage.py createsuperuser
+```
+
+Les visiteurs peuvent créer un compte via `/compte/inscription/`.
+
+## Parcours utilisateur
+1. Page d'accueil (`/`) : liste des produits, filtre par catégorie
+2. Page produit (`/produit/<slug>/`) : détail + ajout au panier
+3. Panier (`/panier/`) : modifier quantités, retirer, voir le total
+4. Checkout (`/commande/commander/`) — nécessite d'être connecté
+5. Confirmation puis historique (`/commande/mes-commandes/`)

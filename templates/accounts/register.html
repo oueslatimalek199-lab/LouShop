@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Inscription — ShopLine{% endblock %}
+
+{% block content %}
+    <h1>Créer un compte</h1>
+
+    <form method="post" style="max-width: 420px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        {% csrf_token %}
+
+        {% comment %}
+        form.as_p affiche automatiquement tous les champs du formulaire
+        (username, email, password1, password2), avec leurs labels et
+        messages d'erreur, chacun dans une balise <p>.
+        {% endcomment %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
+            S'inscrire
+        </button>
+    </form>
+
+    <p style="margin-top: 1.5rem;">
+        Déjà un compte ? <a href="{% url 'login' %}">Se connecter</a>
+    </p>
+{% endblock %}

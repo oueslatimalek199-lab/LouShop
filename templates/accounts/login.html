@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion — ShopLine{% endblock %}
+
+{% block content %}
+    <h1>Connexion</h1>
+
+    <form method="post" style="max-width: 420px; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        {% comment %}
+        "next" permet de revenir sur la page où on était avant d'être
+        redirigé vers /connexion/ (ex: si on cliquait sur "Passer la
+        commande" sans être connecté)
+        {% endcomment %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+        <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
+            Se connecter
+        </button>
+    </form>
+
+    <p style="margin-top: 1.5rem;">
+        Pas encore de compte ? <a href="{% url 'register' %}">S'inscrire</a>
+    </p>
+{% endblock %}

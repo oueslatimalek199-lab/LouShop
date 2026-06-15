@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Mes commandes — ShopLine{% endblock %}
+
+{% block content %}
+    <h1>Mes commandes</h1>
+
+    {% if orders %}
+        <table style="width: 100%; margin-top: 1.5rem; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid var(--border);">
+                    <th style="padding: 0.75rem 0;">Commande</th>
+                    <th>Date</th>
+                    <th>Articles</th>
+                    <th>Total</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr style="border-bottom: 1px solid var(--border); vertical-align: top;">
+                        <td style="padding: 0.75rem 0;">#{{ order.id }}</td>
+                        <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {# order.items vient de related_name="items" sur OrderItem.order #}
+                            <ul style="margin: 0; padding-left: 1.2rem;">
+                                {% for item in order.items.all %}
+                                    <li>{{ item.quantity }} × {{ item.product.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td><strong>{{ order.get_total_cost|floatformat:2 }} TND</strong></td>
+                        <td>
+                            {% if order.paid %}
+                                <span style="color: var(--primary);">Payée</span>
+                            {% else %}
+                                <span style="color: var(--accent-dark);">En attente</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="margin-top: 1.5rem; color: var(--muted);">
+            Tu n'as pas encore passé de commande.
+        </p>
+        <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
+            Voir les produits
+        </a>
+    {% endif %}
+{% endblock %}

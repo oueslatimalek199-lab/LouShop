@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscription - ShopLine{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h1>Inscription</h1>
+        <p>Créez un compte pour accéder à ShopLine</p>
+        
+        <form method="post" class="form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert--danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Nom d'utilisateur *</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <span class="error">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email *</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <span class="error">{{ form.email.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">Prénom</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Nom</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Mot de passe *</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <span class="error">{{ form.password1.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirmez le mot de passe *</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <span class="error">{{ form.password2.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn--large btn--primary">S'inscrire</button>
+        </form>
+        
+        <p class="auth-footer">
+            Vous avez déjà un compte? <a href="{% url 'login' %}">Se connecter</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

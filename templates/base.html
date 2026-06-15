@@ -33,11 +33,23 @@
                 </a>
             </li>
             {% if user.is_authenticated %}
-                <li><a href="#">Mes commandes</a></li>
-                <li><a href="#">Déconnexion ({{ user.username }})</a></li>
+                <li><a href="{% url 'order_list' %}">Mes commandes</a></li>
+                <li>
+                    {% comment %}
+                    Depuis Django 5, LogoutView n'accepte que POST.
+                    On utilise donc un petit <form> au lieu d'un simple lien <a>,
+                    avec un bouton stylé pour qu'il ressemble à un lien.
+                    {% endcomment %}
+                    <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="navbar__link-button">
+                            Déconnexion ({{ user.username }})
+                        </button>
+                    </form>
+                </li>
             {% else %}
-                <li><a href="#">Connexion</a></li>
-                <li><a href="#">Inscription</a></li>
+                <li><a href="{% url 'login' %}">Connexion</a></li>
+                <li><a href="{% url 'register' %}">Inscription</a></li>
             {% endif %}
         </ul>
     </nav>

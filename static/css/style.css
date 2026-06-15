@@ -88,6 +88,25 @@ a:hover {
   font-size: 0.95rem;
 }
 
+/* Bouton "Déconnexion" : on veut qu'il ressemble à un lien de la navbar,
+   même si c'est un <button> dans un <form> (obligatoire pour POST) */
+.navbar__link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.navbar__link-button:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 .navbar__links a:hover {
   color: var(--primary);
   text-decoration: none;
@@ -227,4 +246,54 @@ a:hover {
     flex-wrap: wrap;
     gap: 1rem;
   }
+}
+
+/* ===== Formulaires (généré par {{ form.as_p }}) ===== */
+form p {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+form label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 0.95rem;
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* Messages d'erreur de validation des formulaires Django */
+.errorlist {
+  color: #b3261e;
+  font-size: 0.85rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0;
+}
+
+/* Petit texte d'aide sous certains champs (ex: règles de mot de passe) */
+form .helptext {
+  font-size: 0.8rem;
+  color: var(--muted);
 }

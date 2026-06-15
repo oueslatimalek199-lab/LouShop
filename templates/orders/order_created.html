@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Commande confirmée — ShopLine{% endblock %}
+
+{% block content %}
+    <div style="max-width: 500px;">
+        <h1>✅ Merci, {{ order.full_name }} !</h1>
+
+        <p style="margin-top: 1rem; line-height: 1.7;">
+            Ta commande <strong>#{{ order.id }}</strong> a bien été enregistrée
+            pour un total de <strong>{{ order.get_total_cost|floatformat:2 }} TND</strong>.
+        </p>
+
+        <p style="margin-top: 0.5rem; color: var(--muted);">
+            Elle sera livrée à : {{ order.address }}, {{ order.city }}.
+        </p>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <a href="{% url 'home' %}" class="btn btn-primary">Retour aux produits</a>
+            <a href="{% url 'order_list' %}" class="btn btn-accent">Voir mes commandes</a>
+        </div>
+    </div>
+{% endblock %}

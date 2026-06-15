@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Finaliser la commande — ShopLine{% endblock %}
+
+{% block content %}
+    <h1>Finaliser la commande</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; align-items: start;">
+
+        {# --- Colonne gauche : formulaire d'adresse --- #}
+        <div>
+            <h2>Informations de livraison</h2>
+            <form method="post" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-accent" style="align-self: flex-start;">
+                    Valider la commande
+                </button>
+            </form>
+        </div>
+
+        {# --- Colonne droite : récapitulatif du panier --- #}
+        <div>
+            <h2>Récapitulatif</h2>
+            <table style="width: 100%; margin-top: 1rem; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid var(--border);">
+                        <th style="padding: 0.5rem 0;">Produit</th>
+                        <th>Qté</th>
+                        <th>Sous-total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 0.5rem 0;">{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.total_price|floatformat:2 }} TND</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p style="text-align: right; margin-top: 1rem; font-size: 1.2rem;">
+                Total : <strong class="card__price">{{ cart.get_total_price|floatformat:2 }} TND</strong>
+            </p>
+        </div>
+    </div>
+{% endblock %}

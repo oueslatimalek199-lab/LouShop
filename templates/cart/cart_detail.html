@@ -85,8 +85,12 @@
                 Total : <strong class="card__price">{{ cart.get_total_price|floatformat:2 }} TND</strong>
             </p>
 
-            {# Le traitement de commande sera branché ici à l'étape suivante #}
-            <a href="#" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
+            {% comment %}
+            Si l'utilisateur n'est pas connecté, @login_required (orders/views.py)
+            le redirigera automatiquement vers la page de connexion,
+            avec ?next=/commande/commander/ pour revenir ici après.
+            {% endcomment %}
+            <a href="{% url 'order_create' %}" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
                 Passer la commande
             </a>
         </div>
