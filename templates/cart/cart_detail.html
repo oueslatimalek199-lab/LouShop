@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mon panier — ShopLine{% endblock %}
+
+{% block content %}
+
+    <h1>Mon panier</h1>
+
+    {% comment %}
+    "cart" vient du context_processor (cart/context_processors.py),
+    donc disponible automatiquement sur toutes les pages.
+    "cart" est itérable (grâce à __iter__ dans cart/cart.py)
+    {% endcomment %}
+
+    {% if cart %}
+        <table style="width: 100%; margin-top: 1.5rem; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; border-bottom: 2px solid var(--border);">
+                    <th style="padding: 0.75rem 0;">Produit</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantité</th>
+                    <th>Sous-total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {# Chaque "item" est un dict : {product, quantity, price, total_price, update_quantity_form} #}
+                {% for item in cart %}
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        {# --- Produit (image + nom) --- #}
+                        <td style="padding: 0.75rem 0;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.svg' %}" alt="{{ item.product.name }}"
+                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;">
+                                {% endif %}
+                                <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                            </div>
+                        </td>
+
+                        {# --- Prix unitaire --- #}
+                        <td>{{ item.price|floatformat:2 }} TND</td>
+
+                        {% comment %}
+                        --- Quantité : formulaire pour modifier ---
+                        update_quantity_form a été préparé dans cart/views.py
+                        avec initial={"quantity": ..., "update": True}
+                        {% endcomment %}
+                        <td>
+                            <form action="{% url 'cart_add' item.product.id %}" method="post"
+                                  style="display: flex; gap: 0.5rem; align-items: center;">
+                                {% csrf_token %}
+                                {{ item.update_quantity_form.quantity }}
+                                {{ item.update_quantity_form.update }}
+                                <button type="submit" class="btn btn-primary" style="padding: 0.35rem 0.8rem; font-size: 0.85rem;">
+                                    Actualiser
+                                </button>
+                            </form>
+                        </td>
+
+                        {# --- Sous-total (prix x quantité), calculé dans cart/cart.py --- #}
+                        <td><strong>{{ item.total_price|floatformat:2 }} TND</strong></td>
+
+                        {# --- Bouton retirer --- #}
+                        <td>
+                            <form action="{% url 'cart_remove' item.product.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn" style="background-color: #f3d1d1; color: #b3261e; padding: 0.35rem 0.8rem; font-size: 0.85rem;">
+                                    Retirer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {# --- Total général : get_total_price() défini dans cart/cart.py --- #}
+        <div style="margin-top: 1.5rem; text-align: right;">
+            <p style="font-size: 1.3rem;">
+                Total : <strong class="card__price">{{ cart.get_total_price|floatformat:2 }} TND</strong>
+            </p>
+
+            {# Le traitement de commande sera branché ici à l'étape suivante #}
+            <a href="#" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
+                Passer la commande
+            </a>
+        </div>
+
+    {% else %}
+        {# --- Panier vide --- #}
+        <p style="margin-top: 1.5rem; color: var(--muted);">
+            Ton panier est vide.
+        </p>
+        <a href="{% url 'home' %}" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">
+            Voir les produits
+        </a>
+    {% endif %}
+
+{% endblock %}

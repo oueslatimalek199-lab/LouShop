@@ -19,8 +19,19 @@
         <a href="{% url 'home' %}" class="navbar__logo">ShopLine</a>
         <ul class="navbar__links">
             <li><a href="{% url 'home' %}">Accueil</a></li>
-            <li><a href="#">Produits</a></li>
-            <li><a href="#">Panier</a></li>
+            <li><a href="{% url 'home' %}">Produits</a></li>
+            {% comment %}
+            "cart" est dispo partout grâce au context_processor.
+            cart|length appelle Cart.__len__() -> nombre total d'articles
+            {% endcomment %}
+            <li>
+                <a href="{% url 'cart_detail' %}">
+                    Panier
+                    {% if cart|length > 0 %}
+                        <span class="navbar__cart-count">{{ cart|length }}</span>
+                    {% endif %}
+                </a>
+            </li>
             {% if user.is_authenticated %}
                 <li><a href="#">Mes commandes</a></li>
                 <li><a href="#">Déconnexion ({{ user.username }})</a></li>

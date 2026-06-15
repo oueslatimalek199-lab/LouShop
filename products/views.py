@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category
+from cart.forms import CartAddProductForm
 
 
 def home(request):
@@ -43,7 +44,12 @@ def product_detail(request, slug):
     # disponibles. Si aucun ne correspond -> page 404 automatique.
     product = get_object_or_404(Product, slug=slug, available=True)
 
+    # Formulaire pour choisir la quantité avant d'ajouter au panier
+    # (initial=1 -> "1" sélectionné par défaut dans le menu déroulant)
+    cart_product_form = CartAddProductForm(initial={"quantity": 1})
+
     context = {
         "product": product,
+        "cart_product_form": cart_product_form,
     }
     return render(request, "products/product_detail.html", context)

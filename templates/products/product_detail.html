@@ -52,13 +52,30 @@
                 {{ product.description }}
             </p>
 
-            {# --- Bouton "Ajouter au panier" ---
-                 Le formulaire/la logique du panier sera implémentée à l'étape 3.
-                 Pour l'instant le bouton est désactivé si le produit n'est pas en stock. #}
+            {% comment %}
+            --- Formulaire "Ajouter au panier" ---
+            - action : envoie le formulaire vers la vue cart_add (cart/views.py)
+            - method="post" : on MODIFIE des données côté serveur -> POST (pas GET)
+            - le tag csrf_token est obligatoire pour tout <form method="post">
+              en Django, sinon erreur "403 Forbidden" (protection contre les
+              attaques CSRF)
+            {% endcomment %}
             {% if product.stock > 0 %}
-                <button class="btn btn-accent" style="margin-top: 1.5rem;">
-                    Ajouter au panier
-                </button>
+                <form action="{% url 'cart_add' product.id %}" method="post"
+                      style="margin-top: 1.5rem; display: flex; gap: 0.75rem; align-items: center;">
+                    {% csrf_token %}
+
+                    {% comment %}
+                    Le champ "quantity" du formulaire affiche le <select>
+                    défini dans cart/forms.py (CartAddProductForm)
+                    {% endcomment %}
+                    {{ cart_product_form.quantity.label_tag }}
+                    {{ cart_product_form.quantity }}
+
+                    <button type="submit" class="btn btn-accent">
+                        Ajouter au panier
+                    </button>
+                </form>
             {% else %}
                 <button class="btn btn-accent" style="margin-top: 1.5rem;" disabled>
                     Indisponible
