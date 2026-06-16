@@ -31,10 +31,12 @@
                         </td>
                         <td><strong>{{ order.get_total_cost|floatformat:2 }} TND</strong></td>
                         <td>
-                            {% if order.paid %}
-                                <span style="color: var(--primary);">Payée</span>
+                            {% if order.status == 'delivered' %}
+                                <span style="color: var(--primary); font-weight:600;">✅ Livrée</span>
+                            {% elif order.status == 'shipped' %}
+                                <span style="color: #1d6fa4; font-weight:600;">🚚 Expédiée</span>
                             {% else %}
-                                <span style="color: var(--accent-dark);">En attente</span>
+                                <span style="color: var(--accent-dark);">⏳ En attente</span>
                             {% endif %}
                         </td>
                     </tr>
