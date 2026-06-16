@@ -1,4 +1,4 @@
-# ShopLine — Simple E-commerce Store 
+# LouShop — Simple E-commerce Store 
 
 Projet réalisé dans le cadre du stage Full Stack Development chez **CodeAlpha**.
 
